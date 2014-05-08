@@ -3,18 +3,14 @@
 """
 GUI for extracting inflectional stems based on substrings, multisets, and subsequences
 
-Jackson Lee
-2014-04-03
+Jackson Lee and John Goldsmith
+May 2014
 """
 
 import sys
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 import stemExtract as SE
-
-
-
-
 
 class widgetFromFile(QWidget):
     def __init__(self, parent=None):
@@ -29,10 +25,6 @@ class widgetFromFile(QWidget):
 
         self.resize(400, 100)
         self.setWindowTitle('StemExtract')
-
-        #### data file settings ####
-        # delimiter
-
 
         #### output settings ####
         # filename text box
@@ -68,13 +60,8 @@ class widgetFromFile(QWidget):
         # layout
         outputLayout = QVBoxLayout()
         outputLayout.addLayout(outputFilenameLayout)
+        outputLayout.addWidget(QLabel('If \"Filename\" is blank, it takes the filename of the data file.'))
         outputLayout.addLayout(widthHeightLayout)
-
-        # output group box
-        outputGroupBox = QGroupBox()
-        outputGroupBox.setTitle('Output file settings')
-        outputGroupBox.setLayout(outputLayout)
-
 
         #### bottom buttons ####
         # "Run" button
@@ -89,23 +76,35 @@ class widgetFromFile(QWidget):
         clearDataButton = QPushButton('Clear data', self)
         self.connect(clearDataButton, SIGNAL('clicked()'), self.clearData)
 
-        # buttons' layout
-        buttonLayout = QHBoxLayout()
-        buttonLayout.addWidget(runButton)
-        buttonLayout.addStretch(1)
-        buttonLayout.addWidget(readDataButton)
-        buttonLayout.addWidget(clearDataButton)
+        # buttons' layouts
+        runButtonLayout = QHBoxLayout()
+        runButtonLayout.addStretch(1)
+        runButtonLayout.addWidget(runButton)
+        runButtonLayout.addStretch(1)
 
-
+        loadDataButtonLayout = QHBoxLayout()
+        loadDataButtonLayout.addStretch(1)
+        loadDataButtonLayout.addWidget(readDataButton)
+        loadDataButtonLayout.addWidget(clearDataButton)
+        loadDataButtonLayout.addStretch(1)
 
         #### overall layout ####
         self.updateWidget()
 
-        overallLayout = QVBoxLayout()
+        dataFileDisplayLayout = QHBoxLayout()
+        dataFileDisplayLayout.addStretch(1)
+        dataFileDisplayLayout.addWidget(self.headerDataFile)
+        dataFileDisplayLayout.addStretch(1)
 
-        overallLayout.addWidget(self.headerDataFile)
-        overallLayout.addWidget(outputGroupBox)
-        overallLayout.addLayout(buttonLayout)
+        overallLayout = QVBoxLayout()
+        overallLayout.addWidget(QLabel('Step 1: <b>Read data file</b> '))
+        overallLayout.addLayout(loadDataButtonLayout)
+        overallLayout.addLayout(dataFileDisplayLayout)
+        overallLayout.addWidget(QLabel('Step 2: <b>Adjust output file settings</b> '))
+        overallLayout.addLayout(outputLayout)
+        overallLayout.addWidget(QLabel('Step 3: <b>Click \"Run\"</b> '))
+        overallLayout.addLayout(runButtonLayout)
+        overallLayout.addWidget(QLabel('<hr>'))
         self.setLayout(overallLayout)
 
     def runSE(self):
@@ -157,20 +156,14 @@ class widgetFromFile(QWidget):
         else:
             return True # = good filename
 
-
 class widgetMain(QWidget):
     def __init__(self, parent=None):
         super(widgetMain, self).__init__(parent)
 
         self.dirty = False
-        headerMain = QLabel('StemExtract\nBy Jackson Lee and John Goldsmith\n')
+        headerMain = QLabel('StemExtract\nBy Jackson Lee and John Goldsmith')
         self.resize(400, 300)
         self.setWindowTitle('StemExtract')
-
-#        #### tabs ####
-#        tabWidget = QTabWidget(self)
-#        tabWidget.addTab(widgetFromFile(), QString('From file'))
-#        tabWidget.addTab(widgetFromUser(), QString('From user'))
 
         #### bottom buttons ####
         # "Quit" button
@@ -184,15 +177,11 @@ class widgetMain(QWidget):
 
         #### overall layout ####
         overallLayout = QVBoxLayout()
-
         overallLayout.addWidget(headerMain)
         overallLayout.addWidget(widgetFromFile())
         overallLayout.addLayout(buttonLayout)
 
         self.setLayout(overallLayout)
-
-
-
 
 def main():
     app = QApplication(sys.argv)
@@ -202,5 +191,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-

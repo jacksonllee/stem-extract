@@ -8,9 +8,9 @@ import math
 import itertools
 import time
 import random
-import numpy
+#import numpy
 import codecs
-import re
+#import re
 
 #####################################################
 
@@ -122,32 +122,32 @@ def union(s):
 
 #----------------------------------------------------------------#
 
-def cost(stem,affix,target):
-    '''calculates the cost of a (stem, affix, target) trio
-    and returns the 5-dimensional cost vector'''
+#def cost(stem,affix,target):
+#    '''calculates the cost of a (stem, affix, target) trio
+#    and returns the 5-dimensional cost vector'''
 
-    stemUsed = 0 # count of stem letters used
-    stemNotUsed = 0  # count of stem letters not used
-    affixUsed = 0  # count of affix letters used
-    affixNotUsed = 0  # count of affix letters not used
-    extra = 0  # count of extra letters needed
-    tempStem = str(stem)
-    tempAffix = str(affix)
+#    stemUsed = 0 # count of stem letters used
+#    stemNotUsed = 0  # count of stem letters not used
+#    affixUsed = 0  # count of affix letters used
+#    affixNotUsed = 0  # count of affix letters not used
+#    extra = 0  # count of extra letters needed
+#    tempStem = str(stem)
+#    tempAffix = str(affix)
 
-    for l in target:
-        if l in tempStem:
-            stemUsed += 1
-            tempStem = tempStem.replace(l,'',1)
-        elif l in tempAffix:
-            affixUsed += 1
-            tempAffix = tempAffix.replace(l,'',1)
-        else:
-            extra += 1
-    stemNotUsed = len(stem) - stemUsed
-    affixNotUsed = len(affix) - affixUsed
+#    for l in target:
+#        if l in tempStem:
+#            stemUsed += 1
+#            tempStem = tempStem.replace(l,'',1)
+#        elif l in tempAffix:
+#            affixUsed += 1
+#            tempAffix = tempAffix.replace(l,'',1)
+#        else:
+#            extra += 1
+#    stemNotUsed = len(stem) - stemUsed
+#    affixNotUsed = len(affix) - affixUsed
 
-    return numpy.array([STEM_USED*stemUsed, STEM_NOT_USED*stemNotUsed,
-             AFFIX_USED*affixUsed, AFFIX_NOT_USED*affixNotUsed, EXTRA*extra])
+#    return numpy.array([STEM_USED*stemUsed, STEM_NOT_USED*stemNotUsed,
+#             AFFIX_USED*affixUsed, AFFIX_NOT_USED*affixNotUsed, EXTRA*extra])
 
 #----------------------------------------------------------------#
 
@@ -247,7 +247,7 @@ class Stemplex:
 
     def updateEverything(self):
         self.computeGrammarCost()
-        self.computeCostMatrixList()
+#        self.computeCostMatrixList()
         self.computeDataCost()
         self.computeTotalCost()
         self.MyDirtyFlag = False
@@ -308,11 +308,6 @@ class Stemplex:
 
     #class Stemplex------------------------------------------------------------#
 
-    def affixMatrix(self):
-        return numpy.array(self.affixes())
-
-    #class Stemplex------------------------------------------------------------#
-
     def grammarCost(self):
         if self.MyDirtyFlag:
             self.updateEverything()
@@ -329,27 +324,27 @@ class Stemplex:
             self.updateEverything()
         return self.MyCostMatrixList
 
-    def computeCostMatrixList(self):
-        matrixList = list()
-        for (e, stem) in enumerate(self.MyStemList):
-            matrixForEachStem = numpy.zeros((self.numColumns,5), dtype=int)
-            try:
-                for k in range(self.numColumns):
-                    matrixForEachStem[k] = cost(stem, self.MyAffixes[k], self.MyTargetsList[e][k])
-            except:
-                print 'self.MySourceRowList', self.MySourceRowList
-                print 'matrixForEachStem', matrixForEachStem
-                print 'e', e
-                print 'k', k
-                print 'self.numColumns', self.numColumns
-                print 'self.MyAffixes', self.MyAffixes
-                print 'self.MyTargetsList', self.MyTargetsList
-                print 'self.MyAffixes[k]', self.MyAffixes[k]
-                print 'matrixForEachStem[k]', matrixForEachStem[k]
-                print 'self.MyTargetsList[e][k]', self.MyTargetsList[e][k]
-                raw_input()
-            matrixList.append(matrixForEachStem.T)
-        self.MyCostMatrixList =  matrixList
+#    def computeCostMatrixList(self):
+#        matrixList = list()
+#        for (e, stem) in enumerate(self.MyStemList):
+#            matrixForEachStem = numpy.zeros((self.numColumns,5), dtype=int)
+#            try:
+#                for k in range(self.numColumns):
+#                    matrixForEachStem[k] = cost(stem, self.MyAffixes[k], self.MyTargetsList[e][k])
+#            except:
+#                print 'self.MySourceRowList', self.MySourceRowList
+#                print 'matrixForEachStem', matrixForEachStem
+#                print 'e', e
+#                print 'k', k
+#                print 'self.numColumns', self.numColumns
+#                print 'self.MyAffixes', self.MyAffixes
+#                print 'self.MyTargetsList', self.MyTargetsList
+#                print 'self.MyAffixes[k]', self.MyAffixes[k]
+#                print 'matrixForEachStem[k]', matrixForEachStem[k]
+#                print 'self.MyTargetsList[e][k]', self.MyTargetsList[e][k]
+#                raw_input()
+#            matrixList.append(matrixForEachStem.T)
+#        self.MyCostMatrixList =  matrixList
 
     #class Stemplex------------------------------------------------------------#
 
@@ -823,5 +818,4 @@ class Stemplex:
         return resultDict
 
     # END of class Stemplex----------------------------------------------------#
-
 
